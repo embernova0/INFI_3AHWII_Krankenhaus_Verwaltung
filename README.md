@@ -1,1 +1,0 @@
-# INFI_3AHWII_Krankenhaus_Verwaltung
