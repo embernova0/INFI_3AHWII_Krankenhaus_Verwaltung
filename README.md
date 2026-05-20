@@ -1,59 +1,89 @@
 # Krankenhaus-Verwaltung – Tirol Kliniken Innsbruck
-
 > INFI-Projekt | 3AHWII | HTL | 2025/26
 
 ---
 
 ## Ausgangssituation (IST)
-
-Die Tirol Kliniken Innsbruck verwalten täglich hunderte Patienten, Operationen und Medikamentengaben. Aktuell gibt es keine zentrale Anwendung, die all diese Abläufe samt Zeitverlauf (wann wurde was gemacht?) digital erfasst. Besonders das unterirdische Rohrpostsystem – über das Blutproben, Medikamente und Dokumente zwischen Stationen transportiert werden – wird bisher gar nicht digital protokolliert.
+Die Tirol Kliniken Innsbruck verwalten täglich hunderte Patienten, Operationen 
+und Medikamentengaben. Aktuell gibt es keine zentrale Anwendung, die all diese 
+Abläufe samt Zeitverlauf digital erfasst. Besonders das unterirdische 
+Rohrpostsystem – über das Blutproben, Medikamente und Dokumente zwischen 
+Stationen transportiert werden – wird bisher gar nicht digital protokolliert.
 
 ---
 
 ## Zielsetzung (SOLL)
-
-Eine Java-Desktop-Anwendung soll die wichtigsten Krankenhaus-Abläufe verwalten und den gesamten Zeitverlauf automatisch dokumentieren. Zusätzlich wird das Rohrpostsystem der Klinik über zwei CAN-Sensoren simuliert.
+Es soll ein Maven-Projekt in Java entstehen, das die grundlegenden 
+Krankenhaus-Abläufe verwaltet. Der Benutzer kann Daten erfassen, bearbeiten 
+und einsehen. Zeitstempel werden beim jeweiligen Benutzereingriff gespeichert. 
+Zwei CAN-Sensoren werden simuliert und deren Ausgabe in einer kleinen 
+JavaFX-Ansicht dargestellt.
 
 ---
 
 ## Anwendungsfälle
 
 **1. Patient aufnehmen**
-Man kann einen neuen Patienten mit seinen Stammdaten erfassen, ihn einer Station 
-und einem Zimmer zuweisen. Das System speichert automatisch, wann der Patient 
-aufgenommen und wann er entlassen wurde.
+Der Benutzer kann einen neuen Patienten mit seinen Stammdaten erfassen und ihn 
+einer Station sowie einem Zimmer zuweisen. Dabei wird gespeichert, wann die 
+Aufnahme eingetragen wurde.
 
 **2. Operation planen & durchführen**
-Man kann eine Operation für einen Patienten planen, einen Arzt und eine 
-Krankenschwester zuweisen und einen Saal festlegen. Das System protokolliert 
-automatisch, wann die OP geplant war, wann sie tatsächlich gestartet wurde und 
-wann sie geendet hat.
+Der Benutzer kann eine Operation für einen Patienten anlegen, einen Arzt und 
+eine Krankenschwester zuweisen sowie einen Saal und einen geplanten Starttermin 
+festlegen. Beim manuellen Starten und Beenden der OP wird jeweils der 
+Zeitpunkt gespeichert.
 
 **3. Rohrpostkapsel versenden**
-Man kann eine Kapsel mit einem bestimmten Inhalt (z. B. Blutprobe) von einer 
-Station zu einer anderen schicken. Das System erfasst automatisch via CAN-Sensoren, 
-wann die Kapsel abgeschickt wurde und wann sie angekommen ist.
+Der Benutzer kann eine Kapsel mit einem Inhalt (z.B. Blutprobe) von einer 
+Station zu einer anderen schicken. Beim Abschicken und beim Bestätigen der 
+Ankunft wird jeweils der Zeitpunkt gespeichert – daraus ergibt sich die 
+Lieferdauer.
 
 **4. Medikament verabreichen**
-Eine Krankenschwester kann einem Patienten ein Medikament mit einer bestimmten 
-Dosierung verabreichen. Das System speichert automatisch, wann das Medikament 
-verabreicht wurde und welche Krankenschwester dafür verantwortlich war.
+Eine Krankenschwester kann einem Patienten ein Medikament mit einer Dosierung 
+zuordnen. Beim Eintragen wird gespeichert, wann und von wem die Gabe 
+durchgeführt wurde.
 
 ---
 
-## CAN-Anwendungen
+## KANN-Anwendungen
 
-**CAN 1 – Rohrpost-System:**
-Sobald eine Kapsel eingeworfen wird, erkennt ein simulierter Lichtschrankensensor 
-den Abgang und setzt automatisch `abgeschicktAm` + Status `IN_TRANSIT`. Sobald die 
-Kapsel an der Zielstation ankommt, löst ein Drucksensor die Ankunft aus und setzt 
-`angekommenAm` + Status `ANGEKOMMEN`. Aus beiden Zeitstempeln lässt sich die 
-Lieferdauer berechnen.
+**KANN 1 – Rohrpost-Sensor:**
+Es wird ein Sensor simuliert, der den Abgang und die Ankunft einer 
+Rohrpostkapsel erkennt. Der Benutzer löst den jeweiligen Schritt aus, 
+der Sensor liefert daraufhin den Zeitstempel, der in der Datenbank 
+gespeichert wird.
 
-**CAN 2 – Kühlschrank-Temperatursensor (Medikamentenlager):**
-Ein simulierter Temperatursensor überwacht laufend den Medikamentenkühlschrank. 
-Sobald die Temperatur einen definierten Grenzwert überschreitet, feuert der Sensor 
-ein CAN-Signal. Das System speichert automatisch, wann der Alarm ausgelöst wurde 
-und welche Station betroffen ist, damit das Pflegepersonal sofort reagieren kann.
+**KANN 2 – Temperatursensor (Medikamentenlager):**
+Es wird ein Sensor simuliert, der die Temperatur im Medikamentenkühlschrank 
+überwacht. Überschreitet der Wert einen Grenzwert, wird ein Alarm mit 
+Zeitstempel und betroffener Station gespeichert. Die Ausgabe beider Sensoren 
+ist in einer einfachen JavaFX-Ansicht sichtbar.
+
+---
+
+## Technologien
+| Was | Womit |
+|---|---|
+| Sprache | Java 17 |
+| Datenbank | MySQL |
+| ORM | ORMLite 6.1 |
+| Build | Maven |
+| GUI (Anzeige) | JavaFX |
+| IDE | Eclipse |
+| Versionsverwaltung | Git / GitHub |
+
+---
+
+## Projektstruktur
+```
+src/main/java/at/htl/infi3ahwii/
+├── model/        → Datenbank-Entitäten
+├── repository/   → Datenbankzugriff via ORMLite
+├── service/      → Geschäftslogik
+├── sensor/       → Sensor-Simulation
+└── ui/           → JavaFX-Ansicht (CAN-Anzeige)
+```
 
 ---
