@@ -19,20 +19,41 @@ Eine Java-Desktop-Anwendung soll die wichtigsten Krankenhaus-Abläufe verwalten 
 ## Anwendungsfälle
 
 **1. Patient aufnehmen**
-Man kann einen neuen Patienten mit seinen Stammdaten erfassen, ihn einer Station und einem Zimmer zuweisen. Das System speichert automatisch, wann der Patient aufgenommen und wann er entlassen wurde.
+Man kann einen neuen Patienten mit seinen Stammdaten erfassen, ihn einer Station 
+und einem Zimmer zuweisen. Das System speichert automatisch, wann der Patient 
+aufgenommen und wann er entlassen wurde.
 
 **2. Operation planen & durchführen**
-Man kann eine Operation für einen Patienten planen, einen Arzt und eine Krankenschwester zuweisen und einen Saal festlegen. Das System protokolliert automatisch, wann die OP geplant war, wann sie tatsächlich gestartet wurde und wann sie geendet hat.
+Man kann eine Operation für einen Patienten planen, einen Arzt und eine 
+Krankenschwester zuweisen und einen Saal festlegen. Das System protokolliert 
+automatisch, wann die OP geplant war, wann sie tatsächlich gestartet wurde und 
+wann sie geendet hat.
 
 **3. Rohrpostkapsel versenden**
-Man kann eine Kapsel mit einem bestimmten Inhalt (z. B. Blutprobe) von einer Station zu einer anderen schicken. Das System erfasst automatisch via CAN-Sensoren, wann die Kapsel abgeschickt wurde und wann sie angekommen ist.
+Man kann eine Kapsel mit einem bestimmten Inhalt (z. B. Blutprobe) von einer 
+Station zu einer anderen schicken. Das System erfasst automatisch via CAN-Sensoren, 
+wann die Kapsel abgeschickt wurde und wann sie angekommen ist.
+
+**4. Medikament verabreichen**
+Eine Krankenschwester kann einem Patienten ein Medikament mit einer bestimmten 
+Dosierung verabreichen. Das System speichert automatisch, wann das Medikament 
+verabreicht wurde und welche Krankenschwester dafür verantwortlich war.
 
 ---
 
 ## CAN-Anwendungen
 
-**CAN 1 – Abgangs-Sensor:** Sobald eine Kapsel in den Einwurf-Schacht eingelegt wird, feuert ein simulierter Lichtschrankensensor ein CAN-Signal. Das System setzt daraufhin automatisch den Zeitstempel `abgeschicktAm` und den Status `IN_TRANSIT`.
+**CAN 1 – Rohrpost-System:**
+Sobald eine Kapsel eingeworfen wird, erkennt ein simulierter Lichtschrankensensor 
+den Abgang und setzt automatisch `abgeschicktAm` + Status `IN_TRANSIT`. Sobald die 
+Kapsel an der Zielstation ankommt, löst ein Drucksensor die Ankunft aus und setzt 
+`angekommenAm` + Status `ANGEKOMMEN`. Aus beiden Zeitstempeln lässt sich die 
+Lieferdauer berechnen.
 
-**CAN 2 – Ankunfts-Sensor:** Sobald die Kapsel an der Zielstation ankommt, löst ein simulierter Drucksensor ein CAN-Signal aus. Das System setzt automatisch den Zeitstempel `angekommenAm` und den Status `ANGEKOMMEN`. Aus beiden Zeitstempeln lässt sich die Lieferdauer berechnen.
+**CAN 2 – Kühlschrank-Temperatursensor (Medikamentenlager):**
+Ein simulierter Temperatursensor überwacht laufend den Medikamentenkühlschrank. 
+Sobald die Temperatur einen definierten Grenzwert überschreitet, feuert der Sensor 
+ein CAN-Signal. Das System speichert automatisch, wann der Alarm ausgelöst wurde 
+und welche Station betroffen ist, damit das Pflegepersonal sofort reagieren kann.
 
 ---
