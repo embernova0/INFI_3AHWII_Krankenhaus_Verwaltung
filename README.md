@@ -83,7 +83,7 @@ src/main/java/at/htl/infi3ahwii/
 ├── repository/   → Datenbankzugriff via ORMLite
 ├── service/      → Geschäftslogik
 ├── sensor/       → Sensor-Simulation
-└── ui/           → JavaFX-Ansicht (CAN-Anzeige)
+└── ui/           → JavaFX-Ansicht
 ```
 
 ---
