@@ -16,7 +16,7 @@ Stationen transportiert werden – wird bisher gar nicht digital protokolliert.
 Es soll ein Maven-Projekt in Java entstehen, das die grundlegenden 
 Krankenhaus-Abläufe verwaltet. Der Benutzer kann Daten erfassen, bearbeiten 
 und einsehen. Zeitstempel werden beim jeweiligen Benutzereingriff gespeichert. 
-Zwei CAN-Sensoren werden simuliert und deren Ausgabe in einer kleinen 
+Zwei Sensoren werden simuliert und deren Ausgabe in einer kleinen 
 JavaFX-Ansicht dargestellt.
 
 ---
