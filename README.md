@@ -87,3 +87,5 @@ src/main/java/at/htl/infi3ahwii/
 ```
 
 ---
+
+## Projekt-Repository: https://github.com/embernova0/INFI_3AHWII_Krankenhaus_Verwaltung#krankenhaus-verwaltung--tirol-kliniken-innsbruck
