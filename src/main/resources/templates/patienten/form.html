@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patienten - Krankenhausverwaltung</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-top: 4px solid #1e3a8a;
+        }
+        h1 {
+            color: #1e3a8a;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #1e3a8a;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        input[type="text"] {
+            height: 40px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #1e3a8a;
+            box-shadow: 0 0 5px rgba(30, 58, 138, 0.3);
+        }
+        .btn {
+            padding: 12px 25px;
+            background-color: #1e3a8a;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: #1e40af;
+        }
+        .btn-cancel {
+            background-color: #666;
+        }
+        .btn-cancel:hover {
+            background-color: #555;
+        }
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 th:text="${patient.id != null ? 'Patient bearbeiten' : 'Neuen Patienten anlegen'}">Patient</h1>
+        
+        <form th:action="@{/patienten/speichern}" th:object="${patient}" method="post">
+            <input type="hidden" th:field="*{id}" th:if="${patient.id != null}">
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="vorname">Vorname:</label>
+                    <input type="text" id="vorname" th:field="*{vorname}" required 
+                           pattern="[A-Za-zäöüÄÖÜß]+" 
+                           title="Nur Buchstaben erlaubt"
+                           placeholder="Max"
+                           autocomplete="off">
+                </div>
+                
+                <div class="form-group">
+                    <label for="nachname">Nachname:</label>
+                    <input type="text" id="nachname" th:field="*{nachname}" required 
+                           pattern="[A-Za-zäöüÄÖÜß]+" 
+                           title="Nur Buchstaben erlaubt"
+                           placeholder="Mustermann"
+                           autocomplete="off">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="svnr">SVNR (10 Ziffern):</label>
+                <input type="text" id="svnr" th:field="*{svnr}" required 
+                       pattern="[0-9]{10}" 
+                       title="Genau 10 Ziffern erforderlich"
+                       placeholder="1234567890"
+                       autocomplete="off">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="station">Station:</label>
+                    <select id="station" name="stationId" required>
+                        <option value="">-- Station wählen --</option>
+                        <option th:each="station : ${stationen}" 
+                                th:value="${station.id}" 
+                                th:text="${station.name}"></option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="zimmer">Zimmer:</label>
+                    <select id="zimmer" name="zimmerId" required>
+                        <option value="">-- Zimmer wählen --</option>
+                        <option th:each="zimmer : ${zimmer}" 
+                                th:value="${zimmer.id}" 
+                                th:text="${zimmer.zimmernummer}"></option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="geburtsdatum">Geburtsdatum:</label>
+                <input type="date" id="geburtsdatum" th:field="*{geburtsdatum}" autocomplete="off">
+            </div>
+            
+            <div class="form-group">
+                <label for="aufnahmeZeit">Aufnahmezeit:</label>
+                <input type="datetime-local" id="aufnahmeZeit" th:field="*{aufnahmeZeit}" autocomplete="off">
+            </div>
+            
+            <button type="submit" class="btn">Speichern</button>
+            <a href="/patienten" class="btn btn-cancel">Abbrechen</a>
+        </form>
+    </div>
+</body>
+</html>

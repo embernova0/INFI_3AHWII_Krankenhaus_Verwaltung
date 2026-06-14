@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor-Ansicht - Krankenhausverwaltung</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-top: 4px solid #1e3a8a;
+        }
+        h1 {
+            color: #1e3a8a;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #1e3a8a;
+            padding-bottom: 8px;
+            font-size: 1.5em;
+        }
+        h2 {
+            color: #1e3a8a;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #1e3a8a;
+            padding-bottom: 8px;
+            font-size: 1.2em;
+        }
+        .nav {
+            margin-bottom: 20px;
+        }
+        .nav a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #1e3a8a;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .nav a:hover {
+            background-color: #1e40af;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 0.9em;
+        }
+        th {
+            background-color: #1e3a8a;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .alert {
+            background-color: #eff6ff;
+            border-left: 4px solid #1e3a8a;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .sensor-card {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #1e3a8a;
+            margin-bottom: 15px;
+        }
+        .sensor-card h3 {
+            margin-top: 0;
+            color: #1e3a8a;
+            font-size: 1.1em;
+        }
+        .sensor-card p {
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sensor-Ansicht (KANN-Anwendungen)</h1>
+        
+        <div class="nav">
+            <a href="/">Zurück zur Startseite</a>
+        </div>
+
+        <div class="sensor-card">
+            <h3>KANN 1 - Rohrpost-Sensor</h3>
+            <p>Automatische Protokollierung beim Senden und Ankunft von Rohrpostkapseln.</p>
+            <form th:action="@{/sensoren/log}" method="post">
+                <div class="form-group">
+                    <label for="sensorTyp">Sensor-Typ:</label>
+                    <select id="sensorTyp" name="sensorTyp" required autocomplete="off">
+                        <option value="Rohrpost-Sensor">Rohrpost-Sensor</option>
+                        <option value="Temperatursensor">Temperatursensor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="meldung">Meldung:</label>
+                    <input type="text" id="meldung" name="meldung" placeholder="z.B. Kapsel gesendet" required autocomplete="off">
+                </div>
+                <button type="submit" class="btn">Sensor-Log erstellen</button>
+            </form>
+        </div>
+
+        <h2>Sensor-Logs</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Typ</th>
+                    <th>Nachricht</th>
+                    <th>Zeitstempel</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="log : ${logs}">
+                    <td th:text="${log.sensorTyp}">-</td>
+                    <td th:text="${log.meldung}">-</td>
+                    <td th:text="${log.zeitpunkt != null ? log.zeitpunkt : '-'}">-</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="sensor-card">
+            <h3>KANN 2 - Temperatursensor (Medikamentenlager)</h3>
+            <p>Überwachung der Temperatur im Medikamentenkühlschrank mit Alarmfunktion.</p>
+            <form th:action="@{/sensoren/alarm}" method="post">
+                <div class="form-group">
+                    <label for="stationId">Station:</label>
+                    <select id="stationId" name="stationId" required autocomplete="off">
+                        <option value="">-- Station wählen --</option>
+                        <option th:each="station : ${stationen}" 
+                                th:value="${station.id}" 
+                                th:text="${station.name}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="temperatur">Aktuelle Temperatur (°C):</label>
+                    <input type="number" step="0.1" id="temperatur" name="temperatur" placeholder="z.B. 8.5" required autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="grenzwert">Grenzwert (°C):</label>
+                    <input type="number" step="0.1" id="grenzwert" name="grenzwert" placeholder="z.B. 8.0" required autocomplete="off">
+                </div>
+                <button type="submit" class="btn">Alarm erstellen</button>
+            </form>
+        </div>
+
+        <h2>Temperaturalarme</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Station</th>
+                    <th>Aktuelle Temperatur</th>
+                    <th>Grenzwert</th>
+                    <th>Zeitstempel</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="alarm : ${alarme}">
+                    <td th:text="${alarm.station != null ? alarm.station.name : '-'}">-</td>
+                    <td th:text="${alarm.temperatur + '°C'}">-</td>
+                    <td th:text="${alarm.grenzwert + '°C'}">-</td>
+                    <td th:text="${alarm.alarmzeit != null ? alarm.alarmzeit : '-'}">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

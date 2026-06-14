@@ -13,11 +13,9 @@ Stationen transportiert werden – wird bisher gar nicht digital protokolliert.
 ---
 
 ## Zielsetzung (SOLL)
-Es soll ein Maven-Projekt in Java entstehen, das die grundlegenden 
+Es soll ein Maven-Projekt in Java mit Spring Boot entstehen, das die grundlegenden 
 Krankenhaus-Abläufe verwaltet. Der Benutzer kann Daten erfassen, bearbeiten 
-und einsehen. Zeitstempel werden beim jeweiligen Benutzereingriff gespeichert. 
-Zwei Sensoren werden simuliert und deren Ausgabe in einer kleinen 
-JavaFX-Ansicht dargestellt.
+und einsehen. Zeitstempel werden beim jeweiligen Benutzereingriff gespeichert.
 
 ---
 
@@ -28,49 +26,42 @@ Der Benutzer kann einen neuen Patienten mit seinen Stammdaten erfassen und ihn
 einer Station sowie einem Zimmer zuweisen. Dabei wird gespeichert, wann die 
 Aufnahme eingetragen wurde.
 
-**2. Operation planen & durchführen**
+**2. Stationen verwalten**
+Der Benutzer kann Stationen des Krankenhauses verwalten. Stationen sind fixe Daten 
+und können nicht bearbeitet oder gelöscht werden. Sie dienen als Referenz für Patienten.
+
+**3. Operation planen & durchführen**
 Der Benutzer kann eine Operation für einen Patienten anlegen, einen Arzt und 
 eine Krankenschwester zuweisen sowie einen Saal und einen geplanten Starttermin 
 festlegen. Beim manuellen Starten und Beenden der OP wird jeweils der 
 Zeitpunkt gespeichert.
-
-**3. Rohrpostkapsel versenden**
-Der Benutzer kann eine Kapsel mit einem Inhalt (z.B. Blutprobe) von einer 
-Station zu einer anderen schicken. Beim Abschicken und beim Bestätigen der 
-Ankunft wird jeweils der Zeitpunkt gespeichert – daraus ergibt sich die 
-Lieferdauer.
-
-**4. Medikament verabreichen**
-Eine Krankenschwester kann einem Patienten ein Medikament mit einer Dosierung 
-zuordnen. Beim Eintragen wird gespeichert, wann und von wem die Gabe 
-durchgeführt wurde.
 
 ---
 
 ## KANN-Anwendungen
 
 **KANN 1 – Rohrpost-Sensor:**
-Es wird ein Sensor simuliert, der den Abgang und die Ankunft einer 
-Rohrpostkapsel erkennt. Der Benutzer löst den jeweiligen Schritt aus, 
-der Sensor liefert daraufhin den Zeitstempel, der in der Datenbank 
-gespeichert wird.
+Der Benutzer kann eine Kapsel mit einem Inhalt (z.B. Blutprobe) von einer 
+Station zu einer anderen schicken. Beim Abschicken und beim Bestätigen der 
+Ankunft wird jeweils der Zeitpunkt gespeichert – daraus ergibt sich die 
+Lieferdauer.
 
-**KANN 2 – Temperatursensor (Medikamentenlager):**
-Es wird ein Sensor simuliert, der die Temperatur im Medikamentenkühlschrank 
-überwacht. Überschreitet der Wert einen Grenzwert, wird ein Alarm mit 
-Zeitstempel und betroffener Station gespeichert. Die Ausgabe beider Sensoren 
-ist in einer einfachen JavaFX-Ansicht sichtbar.
+**KANN 2 – Medikamentenverwaltung:**
+Eine Krankenschwester kann einem Patienten ein Medikament mit einer Dosierung 
+zuordnen. Beim Eintragen wird gespeichert, wann und von wem die Gabe 
+durchgeführt wurde.
 
 ---
 
 ## Technologien
 | Was | Womit |
 |---|---|
-| Sprache | Java 17 |
-| Datenbank | MySQL |
-| ORM | ORMLite 6.1 |
+| Sprache | Java 21 |
+| Datenbank | SQLite |
+| ORM | ORMLite |
+| Framework | Spring Boot 3.2.0 |
 | Build | Maven |
-| GUI (Anzeige) | JavaFX |
+| GUI (Anzeige) | Thymeleaf (Web) |
 | IDE | Eclipse |
 | Versionsverwaltung | Git / GitHub |
 
@@ -78,12 +69,13 @@ ist in einer einfachen JavaFX-Ansicht sichtbar.
 
 ## Projektstruktur
 ```
-src/main/java/at/htl/infi3ahwii/
+src/main/java/at/htl/infi3ahwii/verwaltung_krankenhaus/
 ├── model/        → Datenbank-Entitäten
 ├── repository/   → Datenbankzugriff via ORMLite
 ├── service/      → Geschäftslogik
-├── sensor/       → Sensor-Simulation
-└── ui/           → JavaFX-Ansicht
+├── controller/   → Web-Controller
+├── config/       → Datenbank-Konfiguration
+└── DataInitializer → Testdaten
 ```
 
 ---

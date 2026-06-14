@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patienten - Krankenhausverwaltung</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-top: 4px solid #1e3a8a;
+        }
+        h1 {
+            color: #1e3a8a;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #1e3a8a;
+            padding-bottom: 10px;
+        }
+        .nav {
+            margin: 20px 0;
+        }
+        .nav a {
+            display: inline-block;
+            margin-right: 15px;
+            padding: 10px 20px;
+            background-color: #1e3a8a;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .nav a:hover {
+            background-color: #1e40af;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #1e3a8a;
+            color: white;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        .btn {
+            padding: 6px 12px;
+            margin-right: 5px;
+            text-decoration: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .btn-edit {
+            background-color: #FF9900;
+        }
+        .btn-edit:hover {
+            background-color: #e68a00;
+        }
+        .btn-delete {
+            background-color: #CC3300;
+        }
+        .btn-delete:hover {
+            background-color: #b32d00;
+        }
+        .btn-add {
+            background-color: #1e3a8a;
+            padding: 10px 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .btn-add:hover {
+            background-color: #1e40af;
+        }
+        .datetime {
+            font-size: 13px;
+            color: #666;
+        }
+        .datetime .date {
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Patientenverwaltung</h1>
+        
+        <div class="nav">
+            <a href="/">Startseite</a>
+            <a href="/stationen">Stationen</a>
+            <a href="/operationen">Operationen</a>
+            <a href="/rohrpost">Rohrpost</a>
+            <a href="/medikamente">Medikamente</a>
+        </div>
+
+        <a href="/patienten/neu" class="btn btn-add">Neuen Patienten anlegen</a>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Vorname</th>
+                    <th>Nachname</th>
+                    <th>SVNR</th>
+                    <th>Station</th>
+                    <th>Zimmer</th>
+                    <th>Aufnahmezeit</th>
+                    <th>Aktionen</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="patient : ${patienten}">
+                    <td th:text="${patient.id}">1</td>
+                    <td th:text="${patient.vorname}">Max</td>
+                    <td th:text="${patient.nachname}">Mustermann</td>
+                    <td th:text="${patient.svnr}">1234567890</td>
+                    <td th:text="${patient.station != null ? patient.station.name : '-'}">-</td>
+                    <td th:text="${patient.zimmer != null ? patient.zimmer.zimmernummer : '-'}">-</td>
+                    <td class="datetime">
+                        <span class="date" th:text="${patient.aufnahmeZeit != null ? #temporals.format(patient.aufnahmeZeit, 'dd.MM.yyyy') : '-'}">-</span>
+                        <span th:text="${patient.aufnahmeZeit != null ? #temporals.format(patient.aufnahmeZeit, 'HH:mm') : '-'}">-</span>
+                    </td>
+                    <td>
+                        <a th:href="@{/patienten/bearbeiten/{id}(id=${patient.id})}" class="btn btn-edit">Bearbeiten</a>
+                        <a th:href="@{/patienten/loeschen/{id}(id=${patient.id})}" class="btn btn-delete" onclick="return confirm('Wirklich löschen?')">Löschen</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medikamentenvergabe - Krankenhausverwaltung</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-top: 4px solid #1e3a8a;
+        }
+        h1 {
+            color: #1e3a8a;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #1e3a8a;
+            padding-bottom: 10px;
+        }
+        .nav {
+            margin-bottom: 20px;
+        }
+        .nav a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #1e3a8a;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .nav a:hover {
+            background-color: #1e40af;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #1e3a8a;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .btn {
+            padding: 5px 10px;
+            background-color: #1e3a8a;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .btn-delete {
+            background-color: #e74c3c;
+        }
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Medikamentenvergabe</h1>
+        
+        <div class="nav">
+            <a href="/">Startseite</a>
+            <a href="/patienten">Patienten</a>
+            <a href="/stationen">Stationen</a>
+            <a href="/operationen">Operationen</a>
+            <a href="/rohrpost">Rohrpost</a>
+            <a href="/medikamente/neu">Neue Medikamentengabe</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient</th>
+                    <th>Medikament</th>
+                    <th>Krankenschwester</th>
+                    <th>Dosierung</th>
+                    <th>Verabreichungszeit</th>
+                    <th>Aktionen</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="gabe : ${gaben}">
+                    <td th:text="${gabe.patient != null ? gabe.patient.vorname + ' ' + gabe.patient.nachname : '-'}">-</td>
+                    <td th:text="${gabe.medikament != null ? gabe.medikament.name : '-'}">-</td>
+                    <td th:text="${gabe.krankenschwester != null ? gabe.krankenschwester.vorname + ' ' + gabe.krankenschwester.nachname : '-'}">-</td>
+                    <td th:text="${gabe.dosierung}">-</td>
+                    <td th:text="${gabe.verabreichungszeit != null ? #temporals.format(gabe.verabreichungszeit, 'dd.MM.yyyy HH:mm') : '-'}">-</td>
+                    <td>
+                        <a th:href="@{/medikamente/loeschen/{id}(id=${gabe.id})}" class="btn btn-delete">Löschen</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
