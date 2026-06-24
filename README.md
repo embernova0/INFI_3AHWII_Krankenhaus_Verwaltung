@@ -40,13 +40,13 @@ Zeitpunkt gespeichert.
 
 ## KANN-Anwendungen
 
-**KANN 1 – Rohrpost-Sensor:**
+**KANN 1 – Rohrpost-System:**
 Der Benutzer kann eine Kapsel mit einem Inhalt (z.B. Blutprobe) von einer 
 Station zu einer anderen schicken. Beim Abschicken und beim Bestätigen der 
 Ankunft wird jeweils der Zeitpunkt gespeichert – daraus ergibt sich die 
 Lieferdauer.
 
-**KANN 2 – Medikamentenverwaltung:**
+**KANN 2 – Medikamenten-Vergabe:**
 Eine Krankenschwester kann einem Patienten ein Medikament mit einer Dosierung 
 zuordnen. Beim Eintragen wird gespeichert, wann und von wem die Gabe 
 durchgeführt wurde.
